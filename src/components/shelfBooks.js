@@ -34,7 +34,7 @@ class ListBooksShelf extends Component {
                             <BooksList
                                 books={ this.getBooksListShelf(shelf) }
                                 shelf={ shelf }
-                                onChangeBooksShelfCategory={ this.props.updateBookShelfCategory }
+                                onChangeBooksAction={ this.props.updateBookShelfCategory }
                             />
                       </div>
                     </div>
