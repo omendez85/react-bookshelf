@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 const overlay = function () {
   return (
@@ -8,4 +8,4 @@ const overlay = function () {
   );
 }
 
-export default overlay
+export default overlay;

@@ -15,9 +15,11 @@ body, .app {
   background: #2e7c31;
   text-align: center;
 }
-.list-books-title h1 {
+.list-books-title h1,
+.list-books-title h1 a {
   font-weight: 400;
   margin: 0;
+  text-decoration: none;
   color: white;
 }
 
@@ -64,9 +66,10 @@ body, .app {
 }
 
 /* search page */
-
+.search-books{
+    position: relative;
+}
 .search-books-bar {
-  position: fixed;
   width: 100%;
   top: 0;
   left: 0;
@@ -84,12 +87,14 @@ body, .app {
   font-size: 1.25em;
   border: none;
   outline: none;
+  padding-right: 60px;
 }
 
 .close-search {
   display: block;
-  top: 20px;
-  left: 15px;
+  position: absolute;
+  right: 0;
+  top: 0;
   width: 50px;
   height: 53px;
   background: white;
@@ -98,6 +103,8 @@ body, .app {
   background-repeat: no-repeat;
   background-size: 28px;
   font-size: 0;
+  border: 0;
+  cursor: pointer;
 }
 
 .search-books-results {
@@ -189,4 +196,21 @@ body, .app {
 .overlay-loader img{
     display: block;
     margin: 0 auto;
+}
+
+
+/* Error Message API */
+.error-message{
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 20px;
+    width: 90%;
+    background: #FF9494;
+    z-index: 1;
+    border-radius: 5px;
+    margin: 0 auto;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 14px;
 }

@@ -1,23 +1,56 @@
-import React from 'react'
-import { Route } from 'react-router-dom'
-import * as BooksAPI from './utils/BooksAPI'
-import ShelfBooks from './components/shelfBooks'
-import OverlayLoader from './components/overlay'
-import AddBook from './components/addBook'
-import { Link } from 'react-router-dom'
+import React from 'react';
+import { Route, Link } from 'react-router-dom';
+import * as BooksAPI from './utils/BooksAPI';
+import ShelfBooks from './components/shelfBooks';
+import OverlayLoader from './components/overlay';
+import AddBook from './components/addBook';
+import ErrorMessage from './components/errorMessage';
 
-import './css/App.css'
+import './css/App.css';
 
 class BooksApp extends React.Component {
     state = {
-        books: [],
-        loadingLayout: false
+        shelfs: [],
+        loadingLayout: false,
+        searchBooks: [],
+        errorMessageApi: false
     }
 
     componentDidMount() {
-        BooksAPI.getAll().then((books) => {
-            this.setState({ books });
+        BooksAPI.getAll().then((booksResponse) => {
+
+            const shelfs = [];
+
+            booksResponse.forEach( (book, index) => {
+
+                let tempShelf = {
+                    id: '',
+                    name: '',
+                    books: []
+                };
+
+                let shelfBookId = book.shelf;
+                let shelfExist = shelfs.filter( (shelf) => shelf.id === shelfBookId);
+
+                if ( !shelfExist.length ) {
+                    tempShelf.id = shelfBookId;
+                    tempShelf.name = this.formatNameShelf(shelfBookId);
+                    tempShelf.books.push(book);
+                    shelfs.push(tempShelf);
+                } else {
+                    shelfs.forEach( (shelf, i) => {
+                        if (shelf.id === shelfBookId) {
+                            shelf.books.push(book);
+                        }
+                    });
+                }
+            });
+            this.setState({ shelfs });
         });
+    }
+
+    formatNameShelf = (shelfName) => {
+        return shelfName.replace(/([A-Z]+)/g, " $1");
     }
 
     showOverlayLoading = () => {
@@ -32,46 +65,78 @@ class BooksApp extends React.Component {
         }));
     }
 
-    addBookShelf = () => {
-        console.log('Add book');
-    }
-
-    updateBookShelfCategory = (shelfCategory, book, index) => {
+    searchBook = (ev) => {
+        if(ev.target.value === "") return;
 
         this.showOverlayLoading();
 
-        BooksAPI.update(book, shelfCategory).then((newListCategory) => {
+        BooksAPI.search(ev.target.value, 10).then((searchBooks) => {
+            if (searchBooks.error) {
+                this.showErrorMessage();
+            } else {
+                this.setState({ searchBooks });
+            }
+            this.hideOverlayLoading();
+        });
+    }
 
+    showErrorMessage = () => {
+        this.setState(state => ({
+            errorMessageApi: true
+        }));
 
-            const books = this.state.books.map( (_book) => {
-                if( _book.id === book.id ){
-                    _book.shelf = shelfCategory;
+        this.hideErrorMessage();
+    }
+
+    hideErrorMessage = () => {
+        setTimeout( ()=>{
+            this.setState(state => ({
+                errorMessageApi: false
+            }));
+        }, 3000)
+    }
+
+    updateBookShelfCategory = (newShelfCategory, book) => {
+
+        this.showOverlayLoading();
+
+        BooksAPI.update(book, newShelfCategory).then((newListCategory) => {
+
+            const shelfs = this.state.shelfs;
+
+            shelfs.forEach( (shelf, i) => {
+
+                //remove book from currenshelf
+                if (shelf.id === book.shelf) {
+                    shelf.books = shelf.books.filter( (bookInShelf) => bookInShelf.id !== book.id )
                 }
-                return _book;
+
+                // add book new shelf
+                if (shelf.id === newShelfCategory) {
+                    shelf.books.push(book);
+                }
+
             });
 
-            this.setState(state => ({
-                books: books
-            }));
-
+            this.setState({ shelfs });
             this.hideOverlayLoading();
-
         });
     }
 
     render() {
         return (
             <div className="list-books">
-
                 <div className="list-books-title">
-                    <h1>MyReads</h1>
+                    <h1>
+                        <Link to='/'>MyReads</Link>
+                    </h1>
                 </div>
 
                 <Route exact path='/' render={() => (
                     <div>
                         <div className="list-books-content">
                             <ShelfBooks
-                                books={this.state.books}
+                                shelfs={this.state.shelfs}
                                 updateBookShelfCategory={this.updateBookShelfCategory}
                             />
                         </div>
@@ -83,8 +148,14 @@ class BooksApp extends React.Component {
 
                 <Route exact path='/search' render={({ history }) => (
                     <div className="search-books">
-                        <AddBook 
-                            onAddBookShelf={this.addBookShelf}
+                        <AddBook
+                            listBooks={this.state.searchBooks}
+                            onAddBookShelf={ (shelfCategory, book) => {
+                                this.updateBookShelfCategory(shelfCategory, book)
+                                history.push('/')
+                            }}
+                            onSearchBook={this.searchBook}
+                            onGoBack={ () => history.push('/') }
                         />
                     </div>
                 )}/>
@@ -92,9 +163,13 @@ class BooksApp extends React.Component {
                 {  this.state.loadingLayout && (
                     <OverlayLoader/>
                 )}
+
+                {  this.state.errorMessageApi && (
+                    <ErrorMessage/>
+                )}
             </div>
         )
     }
 }
 
-export default BooksApp
+export default BooksApp;

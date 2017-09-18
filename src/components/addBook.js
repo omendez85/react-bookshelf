@@ -1,35 +1,23 @@
 import React, { Component } from 'react';
-import * as BooksAPI from '../utils/BooksAPI';
 import BooksList from './booksList';
 
-
 class AddBook extends Component {
-
-    state = {
-        books: []
-    }
-
-    searchBook = (ev) => {
-
-        if(ev.target.value === "") return;
-
-        BooksAPI.search(ev.target.value, 10).then((books) => {
-            console.log(2222);
-            this.setState({ books });
-        })
-    }
 
     render() {
         return (
             <div>
-                <input 
-                    type='text' 
-                    name='book' 
-                    placeholder='Find book'
-                    onChange={this.searchBook}
-                />
+                <div className="search-books-bar">
+                    <input
+                        type="text"
+                        name="book"
+                        placeholder="Find book"
+                        onChange={this.props.onSearchBook}
+                    />
+                </div>
+                <button className="close-search" onClick={this.props.onGoBack}></button>
                 <BooksList
-                    books={ this.state.books }
+                    books={ this.props.listBooks }
+                    addBookText={ true }
                     onChangeBooksAction={this.props.onAddBookShelf}
                 />
             </div>
