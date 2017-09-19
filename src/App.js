@@ -5,6 +5,7 @@ import ShelfBooks from './components/shelfBooks';
 import OverlayLoader from './components/overlay';
 import AddBook from './components/addBook';
 import ErrorMessage from './components/errorMessage';
+import OverlayMoreInfoBook from './components/overlayMoreInfoBook';
 
 import './css/App.css';
 
@@ -13,7 +14,9 @@ class BooksApp extends React.Component {
         shelfs: [],
         loadingLayout: false,
         searchBooks: [],
-        errorMessageApi: false
+        errorMessageApi: false,
+        showMoreInfoBook: false,
+        bookMoreInfo: {}
     }
 
     componentDidMount() {
@@ -96,6 +99,20 @@ class BooksApp extends React.Component {
         }, 3000)
     }
 
+    showMoreInfoBook = (book) => {
+        this.setState(state => ({
+            showMoreInfoBook: true,
+            bookMoreInfo: book
+        }));
+    }
+
+    hideMoreInfoBook = () => {
+        this.setState(state => ({
+            showMoreInfoBook: false,
+            bookMoreInfo: {}
+        }));
+    }
+
     updateBookShelfCategory = (newShelfCategory, book) => {
 
         this.showOverlayLoading();
@@ -138,6 +155,7 @@ class BooksApp extends React.Component {
                             <ShelfBooks
                                 shelfs={this.state.shelfs}
                                 updateBookShelfCategory={this.updateBookShelfCategory}
+                                onShowMoreInfoBook={ (book) => {this.showMoreInfoBook(book)} }
                             />
                         </div>
                         <div className="open-search">
@@ -155,6 +173,7 @@ class BooksApp extends React.Component {
                                 history.push('/')
                             }}
                             onSearchBook={this.searchBook}
+                            onShowMoreInfoBook={ (book) => {this.showMoreInfoBook(book)} }
                             onGoBack={ () => history.push('/') }
                         />
                     </div>
@@ -166,6 +185,13 @@ class BooksApp extends React.Component {
 
                 {  this.state.errorMessageApi && (
                     <ErrorMessage/>
+                )}
+
+                {  this.state.showMoreInfoBook && (
+                    <OverlayMoreInfoBook
+                        book={this.state.bookMoreInfo}
+                        onHideMoreInfoBook={this.hideMoreInfoBook}
+                    />
                 )}
             </div>
         )

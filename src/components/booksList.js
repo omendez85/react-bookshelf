@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 
 class ListBooks extends Component {
 
     static propTypes = {
-        books: PropTypes.array.isRequired,
+        books: PropTypes.array.isRequired
     }
 
     render() {
@@ -32,6 +32,14 @@ class ListBooks extends Component {
                             </div>
                             <div className="book-title">{ book.title }</div>
                             <div className="book-authors">{ book.author }</div>
+                            <div className="book-moreinfo">
+                                <a
+                                    href="#"
+                                    onClick={ () => { this.props.onShowMoreInfoBook(book) } }
+                                >
+                                    More info
+                                </a>
+                            </div>
                         </div>
                     </li>
                 ))}

@@ -19,6 +19,7 @@ class AddBook extends Component {
                     books={ this.props.listBooks }
                     addBookText={ true }
                     onChangeBooksAction={this.props.onAddBookShelf}
+                    onShowMoreInfoBook={this.props.onShowMoreInfoBook}
                 />
             </div>
         )

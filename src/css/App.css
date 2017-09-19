@@ -214,3 +214,48 @@ body, .app {
     padding: 5px;
     font-size: 14px;
 }
+
+/* overlay more info books */
+.overlay-info-book{
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 1;
+    text-align: center;
+}
+.overlay-info-book .container-overlay{
+    position: relative;
+    background: #FFF;
+    border-radius: 10px;
+    width: 80%;
+    height: 80%;
+    top: 50px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    padding: 15px;
+    text-align: left;
+}
+.container-overlay img{
+    display: block;
+    margin: 0 auto;
+}
+
+.overlay-info-book .close-overlay{
+    position: absolute;
+    top: -10px;
+    right: 0;
+}
+.container-overlay .container-content{
+    overflow: auto;
+    height: 100%;
+}
+.close-overlay button{
+    cursor: pointer;
+}
+.container-overlay .label-attr{
+    font-weight: bold;
+}

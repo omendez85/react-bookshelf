@@ -17,6 +17,8 @@ class ListBooksShelf extends Component {
                             <BooksList
                                 books={ shelf.books }
                                 onChangeBooksAction={ this.props.updateBookShelfCategory }
+
+                                onShowMoreInfoBook={this.props.onShowMoreInfoBook}
                             />
                       </div>
                     </div>
