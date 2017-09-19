@@ -18,9 +18,9 @@ class ListBooks extends Component {
                                 <div className="book-shelf-changer">
                                     <select
                                         onChange={ (event) => this.props.onChangeBooksAction(event.target.value, book) }
-                                        value={'none'}
+                                        value={book.shelf}
                                     >
-                                        <option value="none"  disabled>
+                                        <option value="none" disabled>
                                                 {  (this.props.addBookText) ? `Add to` : `Move to` }
                                                 ...
                                         </option>
