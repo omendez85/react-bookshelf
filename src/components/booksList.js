@@ -7,6 +7,14 @@ class ListBooks extends Component {
         books: PropTypes.array.isRequired
     }
 
+    urlImg(url) {
+        return (url && url.smallThumbnail) ? url.smallThumbnail : '/img/No_Image_Available.png';
+    }
+
+    listAuthors(authors) {
+        return ( authors && authors.length > 0) ? authors.map( (author, i) => <span className="author" key={i}>{author}</span> ) : '';
+    }
+
     render() {
         return (
             <ol className="books-grid">
@@ -14,11 +22,11 @@ class ListBooks extends Component {
                     <li key={book.id}>
                         <div className="book">
                             <div className="book-top">
-                                <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url( ${book.imageLinks.smallThumbnail} )` }}></div>
+                                <div className="book-cover" style={{ backgroundImage: `url(${ this.urlImg(book.imageLinks) })` }}></div>
                                 <div className="book-shelf-changer">
                                     <select
                                         onChange={ (event) => this.props.onChangeBooksAction(event.target.value, book) }
-                                        value={book.shelf}
+                                        value={ (book.shelf) ? book.shelf : 'none'}
                                     >
                                         <option value="none" disabled>
                                                 {  (this.props.addBookText) ? `Add to` : `Move to` }
@@ -31,7 +39,7 @@ class ListBooks extends Component {
                                 </div>
                             </div>
                             <div className="book-title">{ book.title }</div>
-                            <div className="book-authors">{ book.author }</div>
+                            <div className="book-authors">{ this.listAuthors(book.authors) }</div>
                             <div className="book-moreinfo">
                                 <a
                                     href="#"

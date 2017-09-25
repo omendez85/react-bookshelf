@@ -69,18 +69,36 @@ class BooksApp extends React.Component {
     }
 
     searchBook = (ev) => {
-        if(ev.target.value === "") return;
+        if(ev.target.value === "") {
+            this.setState({ searchBooks: [] });
+            return;
+        }
 
         this.showOverlayLoading();
 
         BooksAPI.search(ev.target.value, 10).then((searchBooks) => {
+
             if (searchBooks.error) {
-                this.showErrorMessage();
+                this.setState({ searchBooks: [] });
             } else {
-                this.setState({ searchBooks });
+                this.setState({ searchBooks:this.addShelfSearchBooks(searchBooks) });
             }
             this.hideOverlayLoading();
         });
+    }
+
+    addShelfSearchBooks = (searchBooks) => {
+
+        let arrayBooks = this.state.shelfs.reduce( (last, current) => {
+            return last.concat([...current.books]);
+        }, []);
+
+        return searchBooks.map( book => {
+            arrayBooks.forEach( bookStored => {
+                if(book.id === bookStored.id ) { book.shelf = bookStored.shelf }
+            });
+            return book;         
+        });       
     }
 
     showErrorMessage = () => {
@@ -106,6 +124,9 @@ class BooksApp extends React.Component {
         }));
     }
 
+    cleanSearch = () => {
+        this.setState({ searchBooks: [] });
+    }
     hideMoreInfoBook = () => {
         this.setState(state => ({
             showMoreInfoBook: false,
@@ -173,8 +194,14 @@ class BooksApp extends React.Component {
                                 history.push('/')
                             }}
                             onSearchBook={this.searchBook}
-                            onShowMoreInfoBook={ (book) => {this.showMoreInfoBook(book)} }
-                            onGoBack={ () => history.push('/') }
+                            onShowMoreInfoBook={ (book) => {
+                                this.showMoreInfoBook(book)
+                                this.cleanSearch()
+                            }}
+                            onGoBack={ () => {
+                                history.push('/')
+                                this.cleanSearch()
+                            }}
                         />
                     </div>
                 )}/>

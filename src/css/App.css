@@ -134,9 +134,13 @@ body, .app {
 .book-authors {
   font-size: 0.8em;
 }
+.book-authors .author{
+  display: block;
+}
 .book-title {
   margin-top: 10px;
 }
+
 .book-authors {
   color: #999;
 }
@@ -174,6 +178,10 @@ body, .app {
 .book-cover {
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
   background: #eee;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  width: 128px;
+  height: 193px;
 }
 .book-cover-title {
   padding: 20px 10px 0;
