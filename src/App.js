@@ -151,6 +151,7 @@ class BooksApp extends React.Component {
 
                 // add book new shelf
                 if (shelf.id === newShelfCategory) {
+                    book.shelf = newShelfCategory;
                     shelf.books.push(book);
                 }
 
@@ -191,7 +192,6 @@ class BooksApp extends React.Component {
                             listBooks={this.state.searchBooks}
                             onAddBookShelf={ (shelfCategory, book) => {
                                 this.updateBookShelfCategory(shelfCategory, book)
-                                history.push('/')
                             }}
                             onSearchBook={this.searchBook}
                             onShowMoreInfoBook={ (book) => {
