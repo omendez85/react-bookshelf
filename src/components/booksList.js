@@ -8,7 +8,7 @@ class ListBooks extends Component {
     }
 
     urlImg(url) {
-        return (url && url.smallThumbnail) ? url.smallThumbnail : '/img/No_Image_Available.png';
+        return (url && url.smallThumbnail) ? url.smallThumbnail.replace( /^https?:/ ,'') : '/img/No_Image_Available.png';
     }
 
     listAuthors(authors) {

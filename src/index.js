@@ -2,9 +2,11 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
 import './css/index.css'
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter, HashRouter } from 'react-router-dom'
+
+const Router = ( window.location.host.includes('github') ) ? HashRouter : BrowserRouter;
 
 ReactDOM.render(
-  <BrowserRouter><App /></BrowserRouter>,
-  document.getElementById('root')
+	<Router><App /></Router>,
+	document.getElementById('root')
 );
