@@ -6,6 +6,7 @@ import OverlayLoader from './components/overlay';
 import AddBook from './components/addBook';
 import ErrorMessage from './components/errorMessage';
 import OverlayMoreInfoBook from './components/overlayMoreInfoBook';
+import debounce from 'debounce';
 
 import './css/App.css';
 
@@ -68,15 +69,16 @@ class BooksApp extends React.Component {
         }));
     }
 
-    searchBook = (ev) => {
-        if(ev.target.value === "") {
+    searchBook = (inputValue) => {
+
+        if(inputValue === "") {
             this.setState({ searchBooks: [] });
             return;
         }
 
         this.showOverlayLoading();
 
-        BooksAPI.search(ev.target.value, 10).then((searchBooks) => {
+        BooksAPI.search(inputValue, 10).then((searchBooks) => {
 
             if (searchBooks.error) {
                 this.setState({ searchBooks: [] });
@@ -163,6 +165,8 @@ class BooksApp extends React.Component {
     }
 
     render() {
+
+        const searchBook = debounce( this.searchBook, 200);
         return (
             <div className="list-books">
                 <div className="list-books-title">
@@ -193,7 +197,7 @@ class BooksApp extends React.Component {
                             onAddBookShelf={ (shelfCategory, book) => {
                                 this.updateBookShelfCategory(shelfCategory, book)
                             }}
-                            onSearchBook={this.searchBook}
+                            onSearchBook={searchBook}
                             onShowMoreInfoBook={ (book) => {
                                 this.showMoreInfoBook(book)
                                 this.cleanSearch()

@@ -11,7 +11,7 @@ class AddBook extends Component {
                         type="text"
                         name="book"
                         placeholder="Find book"
-                        onChange={this.props.onSearchBook}
+                        onChange={ (ev) => this.props.onSearchBook(ev.target.value)}
                     />
                 </div>
                 <button className="close-search" onClick={this.props.onGoBack}></button>
